@@ -1,0 +1,26 @@
+{
+  "name": "kakarot-rpc-benchmarking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "metrics": "node ./scripts/metrics.js",
+    "pool": "node ./scripts/txn_pool.js",
+    "benchmark-native-token": "artillery run -e local ./scripts/native-token-transfer.yml",
+    "benchmark": "concurrently -k --success 'last' 'npm:benchmark-native-token' 'npm:metrics'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@ethersproject/experimental": "^5.7.0",
+    "axios": "^1.4.0",
+    "ethers": "^5.7.0",
+    "viem": "^1.3.0"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.0-35",
+    "concurrently": "^8.2.0"
+  }
+}
