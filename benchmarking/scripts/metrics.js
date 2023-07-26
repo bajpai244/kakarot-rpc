@@ -1,9 +1,6 @@
 const { providers, Wallet } = require("ethers")
 const { writeFileSync } = require("fs")
-
-const sleep  = async (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+const {sleep} = require("./utils")
 
 const main = async () => { 
     const provider = new providers.JsonRpcProvider("http://127.0.0.1:3030");

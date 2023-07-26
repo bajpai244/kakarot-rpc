@@ -1,5 +1,6 @@
 const { providers, Wallet } = require("ethers");
 const { parseEther} = require("ethers/lib/utils");
+const {sleep} = require("./utils")
 
 
  const nativeTokenTransfer = async (context, ee, next) => {
@@ -33,17 +34,13 @@ const { parseEther} = require("ethers/lib/utils");
     console.log("transaction sent, current nonce ---->", nonce);
 
     // break to make sure transactions arrive in order to RPC.
-    // NOTE: reduce it to 10ms if you are skipping validate
-    await sleep(200);
+    // NOTE: reduce it if you are skipping validate
+    await sleep(350);
 }
 
     next();
 }
 
-const sleep  = async (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 module.exports = {
-    nativeTokenTransfer
+    nativeTokenTransfer,
 }

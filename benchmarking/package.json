@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "metrics": "node ./scripts/metrics.js",
     "pool": "node ./scripts/txn_pool.js",
+    "run-madara": "RUST_LOG=error ../lib/bin/madara --dev",
+    "rpc-node":"concurrently 'npm:run-madara' './scripts/run_rpc.sh'",
     "benchmark-native-token": "artillery run -e local ./scripts/native-token-transfer.yml",
-    "benchmark": "concurrently -k --success 'last' 'npm:benchmark-native-token' 'npm:metrics'"
+    "benchmark": "concurrently -k --success 'last' 'npm:benchmark-native-token' 'npm:metrics'",
+    "benchmark:ci": "concurrently -k --success 'last' 'npm:rpc-node' 'node ./scripts/check_rpc_is_init.js && npm run benchmark'"
   },
   "keywords": [],
   "author": "",
