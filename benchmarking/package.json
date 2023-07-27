@@ -8,11 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "metrics": "node ./scripts/metrics.js",
     "pool": "node ./scripts/txn_pool.js",
-    "run-madara": "RUST_LOG=error ./bin/madara --dev",
-    "rpc-node":"concurrently 'npm:run-madara' './scripts/run_rpc.sh'",
+    "run-madara": "RUST_LOG=error ../lib/madara/target/release/madara --dev",
+    "rpc-node":"concurrently -k --success first 'npm:run-madara' './scripts/run_rpc.sh'",
     "benchmark-native-token": "artillery run -e local ./scripts/native-token-transfer.yml",
-    "benchmark": "concurrently -k --success 'last' 'npm:benchmark-native-token' 'npm:metrics'",
-    "benchmark:ci": "concurrently -k --success 'last' 'npm:rpc-node' 'node ./scripts/check_rpc_is_init.js && npm run benchmark'"
+    "benchmark": "concurrently -k --success last 'npm:benchmark-native-token' 'npm:metrics'",
+    "benchmark:ci": "concurrently -k --success last 'npm:run-madara' './scripts/run_rpc.sh' 'node ./scripts/check_rpc_is_init.js && npm run benchmark-native-token'  'node ./scripts/check_rpc_is_init.js && npm run metrics'"
   },
   "keywords": [],
   "author": "",

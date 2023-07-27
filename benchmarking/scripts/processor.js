@@ -15,7 +15,8 @@ const {sleep} = require("./utils")
     const recepientAddress = wallet2.address;
     let nonce = await wallet.getTransactionCount();
 
-    for (let i =0 ; i < 5000 ; i +=1 ) {
+    try {
+    for (let i =0 ; i < 500 ; i +=1 ) {
 
     let tx = {
         to: recepientAddress,
@@ -36,6 +37,18 @@ const {sleep} = require("./utils")
     // break to make sure transactions arrive in order to RPC.
     // NOTE: reduce it if you are skipping validate
     await sleep(350);
+}
+}
+catch(err) {
+    // the rpc is killed once metrics are collected, and hence we will land to this error
+    if(err.code === "NETWORK_ERROR")
+    {
+       console.log("kakarot rpc is down");
+       process.exit(0);
+    }
+    else {
+        throw err
+    }
 }
 
     next();

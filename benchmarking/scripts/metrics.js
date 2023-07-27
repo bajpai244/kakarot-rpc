@@ -37,7 +37,9 @@ const main = async () => {
     console.log("transactions per second", tpsPerSec);
 
     console.log("saving data to report.json")
-    writeFileSync("./reports/madara.json", JSON.stringify({ tpsPerBlock, tpsPerSec }));
+    writeFileSync("./reports/metrics.json", JSON.stringify([{ name: "transactions per block", value: tpsPerBlock, value:"transactions/block" }, 
+    {name: "transactions per second", value: tpsPerSec, unit: "transactions/second" }
+]));
 }
 
 
