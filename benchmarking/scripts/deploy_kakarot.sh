@@ -33,6 +33,9 @@ if [[ $exit_status -eq 1 ]]; then
     fi
 
 cd ..
-make pull-kakarot
+
+# make pull-kakarot
 cp lib/kakarot/.env.example lib/kakarot/.env
-cd lib/kakarot && STARKNET_NETWORK=madara poetry run python ./scripts/compile_kakarot.py && STARKNET_NETWORK=madara poetry run python ./scripts/deploy_kakarot.py
+cd lib/kakarot 
+STARKNET_NETWORK=madara poetry run python ./scripts/compile_kakarot.py
+STARKNET_NETWORK=madara poetry run python ./scripts/deploy_kakarot.py
