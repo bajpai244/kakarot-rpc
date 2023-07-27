@@ -67,7 +67,6 @@
               git submodule update --init --recursive
               cd lib/kakarot
               poetry install 
-              STARKNET_NETWORK=madara poetry run python ./scripts/compile_kakarot.py
           - name: Load cached venv
             id: cached-poetry-dependencies
             uses: actions/cache@v3
