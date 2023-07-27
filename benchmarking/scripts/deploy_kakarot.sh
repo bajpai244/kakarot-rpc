@@ -5,7 +5,7 @@
 # Function to check RPC status with retries
 check_rpc_status() {
   local RPC_ENDPOINT="http://127.0.0.1:9944/health"  
-  local MAX_RETRIES=5
+  local MAX_RETRIES=50
   local WAIT_SECONDS=5
 
   local retry_count=0
