@@ -1,0 +1,10 @@
+[submodule "kakarot"]
+	path = lib/kakarot
+	url = https://github.com/kkrt-labs/kakarot.git
+[submodule "lib/forge-std"]
+	path = lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/madara"]
+	path = lib/madara
+	url = https://github.com/keep-starknet-strange/madara
+	commit = c46c02e6b1fe7927143d17f14ed0eec6f62f7031
