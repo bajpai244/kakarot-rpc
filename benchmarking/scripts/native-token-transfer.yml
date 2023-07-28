@@ -19,4 +19,4 @@ config:
 scenarios:
   - name: native_token_transfer
     flow:
-        - function: "nativeTokenTransfer"
+      - function: "nativeTokenTransfer"
