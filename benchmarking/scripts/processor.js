@@ -17,7 +17,7 @@ const nativeTokenTransfer = async (context, ee, next) => {
     for (let i = 0; i < 500; i += 1) {
       let tx = {
         to: recepientAddress,
-        value: parseEther("0.00001"),
+        value: parseEther("0.000001"),
         nonce,
       };
 
@@ -28,7 +28,8 @@ const nativeTokenTransfer = async (context, ee, next) => {
         .sendTransaction(signedTx)
         .then()
         .catch((e) => {
-          // console.log('e ---->', e);
+          // Ethers will error because it will calculate a transaction hash which will not match the starknet transaction hash
+          // You can see more about the issue here -> https://github.com/ethers-io/ethers.js/issues/4233
         });
 
       nonce += 1;
