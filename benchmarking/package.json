@@ -8,7 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "npx prettier --write .",
     "metrics": "node ./scripts/metrics.js",
-    "pool": "node ./scripts/txn_pool.js",
     "run-madara": "RUST_LOG=error ../lib/madara/target/release/madara --dev",
     "rpc-node": "concurrently -k --success first 'npm:run-madara' './scripts/run_rpc.sh'",
     "benchmark-native-token": "artillery run -e local ./scripts/native-token-transfer.yml",

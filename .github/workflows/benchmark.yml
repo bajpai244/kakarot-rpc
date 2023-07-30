@@ -2,16 +2,16 @@
     name: Task - Benchmark
     
     on:
-      workflow_dispatch:
-      workflow_call:
       push:
+        # TODO: after testing on feat/benchmarking-native-token-transfer, remove from array
+        branches: [main, feat/benchmark-native-token-transfer]
       pull_request:
+        branches: [main]
 
     permissions:
-      # deployments permission to deploy GitHub pages website
       deployments: write
-      # contents permission to update benchmark contents in gh-pages branch
       contents: write
+      pull-requests: write
     
     jobs:
       benchmark:
@@ -20,11 +20,14 @@
           - uses: actions/checkout@v3
             with:
               clean: false
+          
+          # install dependencies
           - name: Install submodules and dependencies
             run: |
               git submodule update --init --recursive
               sudo apt update
               sudo apt install -y protobuf-compiler clang jq
+
           - uses: actions/cache@v3
             id: cache
             with:
@@ -35,13 +38,13 @@
                 ~/.cargo/git/db/
                 ./lib/madara/target/
               key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}-${{hashFiles('./lib/madara/Cargo.lock')}}
+          
+          # build rpc and madara  
           - name: Setup Rust
-            if: steps.cache.outputs.cache-hit  != 'true'
             uses: actions-rs/toolchain@v1
             with:
                 toolchain: stable
           - name: Build RPC
-            if: steps.cache.outputs.cache-hit  != 'true'
             run: |
               cargo build --release
           - name: Build Madara
@@ -51,7 +54,7 @@
               cargo build --release
           
           
-          # Python Setup
+          # Python Setup and dependencies installation
           - uses: actions/setup-python@v4
             with:
               python-version: "3.9.13"
@@ -68,9 +71,8 @@
               virtualenvs-create: true
               virtualenvs-in-project: true
               installer-parallel: true
-          - name: pull kakarot submodule and setup
+          - name: install kakarot python dependencies
             run: |-
-              git submodule update --init --recursive
               cd lib/kakarot
               poetry install 
           - name: Load cached venv
@@ -80,6 +82,7 @@
               path: .venv
               key: venv-${{ runner.os }}-${{ hashFiles('./lib/kakarot/poetry.lock') }}
 
+          # benchmark rpc
           - name: install benchmark projects
             run: |-
               cd ./benchmarking
@@ -88,7 +91,8 @@
             run: |
               cd benchmarking
               ./scripts/benchmark.sh
-              # npm run benchmark:ci
+
+          # compare benchmarks and publish
           - name: Compare result
             uses: benchmark-action/github-action-benchmark@v1
             with:
