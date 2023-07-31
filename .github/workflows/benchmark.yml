@@ -3,8 +3,7 @@
     
     on:
       push:
-        # TODO: after testing on feat/benchmarking-native-token-transfer, remove from array
-        branches: [main, feat/benchmark-native-token-transfer]
+        branches: [main]
       pull_request:
         branches: [main]
 

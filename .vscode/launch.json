@@ -23,18 +23,14 @@
       "request": "launch",
       "name": "Debug executable 'kakarot-rpc'",
       "cargo": {
-        "args": ["build", "--bin=kakarot-rpc", "--package=kakarot-rpc", "--profile=dev"],
+        "args": ["build", "--bin=kakarot-rpc", "--package=kakarot_rpc"],
         "filter": {
           "name": "kakarot-rpc",
           "kind": "bin"
         }
       },
       "args": [],
-      "cwd": "${workspaceFolder}",
-      "env": {
-        "RUST_LOG": "trace",
-        "STARKNET_NETWORK": "madara"
-      }
+      "cwd": "${workspaceFolder}"
     },
     {
       "type": "lldb",
