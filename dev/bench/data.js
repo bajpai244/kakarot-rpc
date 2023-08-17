@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692268713706,
+  "lastUpdate": 1692268716651,
   "repoUrl": "https://github.com/bajpai244/kakarot-rpc",
   "entries": {
     "Benchmark": [
@@ -65,6 +65,39 @@ window.BENCHMARK_DATA = {
           {
             "name": "transactions per second",
             "value": 0.48148148148148145,
+            "unit": "transactions/second"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "82421016+greged93@users.noreply.github.com",
+            "name": "greged93",
+            "username": "greged93"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "f2ca11e31f3d5042b28274ab8eca800857bad998",
+          "message": "feat: receipt wrapper (#434)\n\n* add convertible event filter\n\n* add wrapper for starknet to eth transaction receipt\n\n* change log\n\n* add unit test for transaction receipt conversion",
+          "timestamp": "2023-08-17T08:49:40Z",
+          "tree_id": "68e338fbb6291c523bd56fb1d6b4cb91b74580a7",
+          "url": "https://github.com/bajpai244/kakarot-rpc/commit/f2ca11e31f3d5042b28274ab8eca800857bad998"
+        },
+        "date": 1692268707679,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "transactions per block",
+            "value": "transactions/block"
+          },
+          {
+            "name": "transactions per second",
+            "value": 0.4166666666666667,
             "unit": "transactions/second"
           }
         ]
