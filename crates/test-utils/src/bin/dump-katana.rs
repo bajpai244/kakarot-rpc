@@ -23,11 +23,10 @@ async fn main() {
         .dump_state()
         .expect("Failed to call dump_state on Katana state");
 
-    let state = serde_json::to_string(&dump_state).expect("Failed to serialize state");
-
-    // Dump the state
-    std::fs::create_dir_all(".katana/").expect("Failed to create Kakata dump dir");
-    std::fs::write(".katana/dump.json", state).expect("Failed to write dump to .katana/dump.json");
+        // Dump the state
+        std::fs::create_dir_all(".katana/").expect("Failed to create Kakata dump dir");
+        std::fs::write(".katana/dump.json", serde_json::to_string(&dump_state).expect("Failed to serialize state"))
+            .expect("Failed to write dump to .katana/dump.json");
 
     let deployer_account = DeployerAccount {
         address: test_context.client().deployer_account().address(),

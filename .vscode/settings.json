@@ -3,5 +3,10 @@
   "files.exclude": {
     "**/.git": false
   },
-  "rust-analyzer.check.command": "clippy"
+  "rust-analyzer.check.command": "clippy",
+  "rust-analyzer.linkedProjects": [
+    "./crates/test-utils/Cargo.toml",
+    "./crates/test-utils/Cargo.toml",
+    "./crates/test-utils/Cargo.toml"
+  ]
 }

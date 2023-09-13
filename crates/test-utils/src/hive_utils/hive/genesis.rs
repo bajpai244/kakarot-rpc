@@ -51,7 +51,8 @@ pub struct HiveGenesisConfig {
 
 impl HiveGenesisConfig {
     pub fn from_file(path: &str) -> Result<Self> {
-        Ok(serde_json::from_str(&fs::read_to_string(path)?)?)
+        let hive_genesis_file = File::open(path)?;
+        Ok(serde_json::from_reader(&hive_genesis_file)?)
     }
 }
 
@@ -224,10 +225,9 @@ pub async fn serialize_hive_to_madara_genesis_config(
         madara_loader.storage.push(is_initialized);
     });
 
-    // Serialize the loader to a string
-    let madara_genesis_str = serde_json::to_string_pretty(&madara_loader)?;
-    // Write the string to a file
-    fs::write(combined_genesis, madara_genesis_str)?;
+    // Serilaize the loader to a string and then to a file
+    let combined_genesis_file= File::new(combined_genesis);
+    fs::write(combined_genesis, serde_json::to_string_pretty(&madara_loader)?)?;
 
     Ok(())
 }
@@ -303,21 +303,21 @@ mod tests {
         let hive_genesis = HiveGenesisConfig::from_file("./src/hive_utils/test_data/hive_genesis.json").unwrap();
         let madara_loader =
             serde_json::from_str::<GenesisLoader>(std::include_str!("../test_data/madara_genesis.json")).unwrap();
-        let combined_genesis = Path::new("./src/hive_utils/test_data/combined_genesis.json");
+        let combined_genesis_path = Path::new("./src/hive_utils/test_data/combined_genesis.json");
         let compiled_path = Path::new("./cairo-contracts/build");
 
         // When
-        serialize_hive_to_madara_genesis_config(hive_genesis, madara_loader, combined_genesis, compiled_path)
+        serialize_hive_to_madara_genesis_config(hive_genesis, madara_loader, combined_genesis_path, compiled_path)
             .await
             .unwrap();
 
         // Then
-        let combined_genesis = fs::read_to_string("./src/hive_utils/test_data/combined_genesis.json").unwrap();
+        let combined_genesis_file = File::open(combined_genesis_path).unwrap();
         let loader: GenesisLoader =
-            serde_json::from_str(&combined_genesis).expect("Failed to read combined_genesis.json");
+            serde_json::from_reader(&combined_genesis_file).expect("Failed to read combined_genesis.json");
         assert_eq!(9 + 3 + 7, loader.contracts.len()); // 9 original + 3 Kakarot contracts + 7 hive
 
         // After
-        fs::remove_file("./src/hive_utils/test_data/combined_genesis.json").unwrap();
+        fs::remove_file(combined_genesis_path).unwrap();
     }
 }
