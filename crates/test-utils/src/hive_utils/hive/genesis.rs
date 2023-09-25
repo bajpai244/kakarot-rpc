@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::fs;
+use std::fs::File;
 use std::io::Error as IoError;
 use std::path::Path;
 
@@ -74,7 +74,7 @@ lazy_static! {
 pub async fn serialize_hive_to_madara_genesis_config(
     hive_genesis: HiveGenesisConfig,
     mut madara_loader: GenesisLoader,
-    combined_genesis: &Path,
+    combined_genesis_path: &Path,
     compiled_path: &Path,
 ) -> Result<(), IoError> {
     // Compute the class hash of Kakarot contracts
@@ -225,9 +225,14 @@ pub async fn serialize_hive_to_madara_genesis_config(
         madara_loader.storage.push(is_initialized);
     });
 
-    // Serilaize the loader to a string and then to a file
-    let combined_genesis_file= File::new(combined_genesis);
-    fs::write(combined_genesis, serde_json::to_string_pretty(&madara_loader)?)?;
+    let combined_genesis_file = File::options()
+        .create_new(true)
+        .write(true)
+        .append(false)
+        .open(combined_genesis_path)
+        .unwrap_or_else(|_| panic!("Failed to open file at path {:?}", combined_genesis_path));
+    // Serialize the loader to a file
+    serde_json::to_writer_pretty(combined_genesis_file, &madara_loader)?;
 
     Ok(())
 }
@@ -311,13 +316,16 @@ mod tests {
             .await
             .unwrap();
 
+        let combined_genesis_file = File::open(combined_genesis_path)
+            .unwrap_or_else(|_| panic!("Failed to open file at path {:?}", &combined_genesis_path));
+
         // Then
-        let combined_genesis_file = File::open(combined_genesis_path).unwrap();
         let loader: GenesisLoader =
             serde_json::from_reader(&combined_genesis_file).expect("Failed to read combined_genesis.json");
         assert_eq!(9 + 3 + 7, loader.contracts.len()); // 9 original + 3 Kakarot contracts + 7 hive
 
         // After
-        fs::remove_file(combined_genesis_path).unwrap();
+        std::fs::remove_file(combined_genesis_path)
+            .unwrap_or_else(|_| panic!("Failed to remove file at path {:?}", combined_genesis_path));
     }
 }
